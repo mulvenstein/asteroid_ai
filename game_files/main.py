@@ -36,7 +36,6 @@ from utils import center_text, get_highscore, save_highscore
 from ship import Ship, ShipBreakup
 import sound
 
-
 class Game:
     """Manage the game state and various classes."""
 
@@ -44,6 +43,7 @@ class Game:
         """Initialise pyxel and various classes and variables (one off)."""
 
         pyxel.init(200, 200, scale=2)
+        pyxel.mouse(True)
         self.ship = Ship(*constants.SHIP_INITIAL_POSITION, constants.SHIP_COLOUR)
         Asteroid.init_class(self.ship)
         sound.init_music()
@@ -78,9 +78,10 @@ class Game:
     def check_input(self):
         """Check for input and modify the game state accordingly."""
         if not self.death:
-            if pyxel.btn(pyxel.KEY_UP):
+            if pyxel.btn(pyxel.KEY_UP) or pyxel.btnp(pyxel.KEY_W):
                 if not self.ship.accelerating:
                     sound.start_accelerate()
+                    print("upupup")
                 self.ship.accelerate()
             else:
                 if self.ship.accelerating:
@@ -95,15 +96,19 @@ class Game:
             else:
                 self.ship.no_shoot()
 
-            if pyxel.btn(pyxel.KEY_LEFT):
+            if pyxel.btn(pyxel.KEY_LEFT) or pyxel.btnp(pyxel.KEY_A):
                 self.ship.rotate("l")
-            elif pyxel.btn(pyxel.KEY_RIGHT):
+            elif pyxel.btn(pyxel.KEY_RIGHT) or pyxel.btnp(pyxel.KEY_D):
                 self.ship.rotate("r")
         elif pyxel.btnp(pyxel.KEY_R):
             self.reset_game()
 
         if pyxel.btnp(pyxel.KEY_Q) or pyxel.btnp(pyxel.KEY_ESCAPE):
             pyxel.quit()
+
+        # adding ability to reset whenever
+        if pyxel.btnp(pyxel.KEY_R):
+            self.reset_game()
 
     def check_collisions(self):
         """Check for collisions between the ship and asteroids, and the bullet and asteroids."""
