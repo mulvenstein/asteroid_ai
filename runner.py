@@ -5,7 +5,8 @@ import subprocess               # run instace of asteroids game in background.
 import time                     # testing gen 0 running for 10 seconds
 import ctypes                   # sending Virtual Keyboard presses
 from ctypes import wintypes     # sending Virtual Keyboard presses
-import multiprocessing          # shared data to determine loss or not
+from multiprocessing import Process,Queue,Pipe
+                                # shared data to determine loss or not
 
 user32 = ctypes.WinDLL('user32', use_last_error=True)
 INPUT_MOUSE    = 0
@@ -96,20 +97,27 @@ def press(virtual_key):
     time.sleep(.01) 
 # directx scan codes http://www.gamespp.com/directx/directInputKeyboardScanCodes.html
 
-
-resolution = pyautogui.size()
 p = subprocess.Popen([sys.executable, 'game_files/main.py'],
                                     stdout=subprocess.PIPE, 
                                     stderr=subprocess.STDOUT)
 
-pyautogui.moveTo(resolution[0]/2, resolution[1]/2 - 210, 1) # move 2 middle of the screen over 1 sec
+def open_sub():
+    p = subprocess.Popen([sys.executable, 'game_files/main.py'], 
+                                    stdout=subprocess.PIPE, 
+                                    stderr=subprocess.STDOUT)
+    return
 
+# open_sub; # run game!
+
+resolution = pyautogui.size()
+pyautogui.moveTo(resolution[0]/2, resolution[1]/2 - 210, 1) # move 2 middle of the screen over 1 sec
 pyautogui.click()
 
 cur_time = time.time()
 press(VK_R)
 while time.time() <= cur_time + 10:
     press( random.choice( [VK_A, VK_D, VK_SPACE, VK_W ] ) )
+
     # press(VK_SPACE)
 
 # press(VK_Q)

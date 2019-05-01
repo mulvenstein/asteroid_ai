@@ -27,7 +27,7 @@ Controls are **→** & **←** for turning, **↑** for acceleration and **space
 """
 
 import pyxel
-
+from multiprocessing import Process,Pipe #shared data
 from asteroid import Asteroid
 from bullet import Bullet
 import collisions
@@ -39,7 +39,7 @@ import sound
 class Game:
     """Manage the game state and various classes."""
 
-    def __init__(self):
+    def __init__(self, child_con):
         """Initialise pyxel and various classes and variables (one off)."""
 
         pyxel.init(200, 200, scale=2)
@@ -47,7 +47,7 @@ class Game:
         self.ship = Ship(*constants.SHIP_INITIAL_POSITION, constants.SHIP_COLOUR)
         Asteroid.init_class(self.ship)
         sound.init_music()
-
+        self.child_con = child_con # for multiprocessing sharing data thru a pipe
         self.reset_game()
         self.high_score = get_highscore(constants.HIGH_SCORE_FILE)
 
