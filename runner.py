@@ -1,12 +1,14 @@
 import pyautogui                # move mouse
 import random                   # randomly choosing moves
-import sys                      # appending path of game_files
+import sys, os                  # appending path of game_files
 import subprocess               # run instace of asteroids game in background.
 import time                     # testing gen 0 running for 10 seconds
 import ctypes                   # sending Virtual Keyboard presses
 from ctypes import wintypes     # sending Virtual Keyboard presses
-from multiprocessing import Process,Queue,Pipe
+from multiprocessing import Process,Queue,Pipe, freeze_support
                                 # shared data to determine loss or not
+sys.path.append(os.path.join(sys.path[0],"game_files"))
+from game import play
 
 user32 = ctypes.WinDLL('user32', use_last_error=True)
 INPUT_MOUSE    = 0
@@ -96,28 +98,32 @@ def press(virtual_key):
     ReleaseKey(virtual_key)
     time.sleep(.01) 
 # directx scan codes http://www.gamespp.com/directx/directInputKeyboardScanCodes.html
+ 
+# parent_conn,child_conn = Pipe()  # try using multiprocessing
+# p = Process(target=f, args=(child_conn,)) 
+# p.start()
+# print(parent_conn.recv())   # prints "Hello"
 
-p = subprocess.Popen([sys.executable, 'game_files/main.py'],
-                                    stdout=subprocess.PIPE, 
-                                    stderr=subprocess.STDOUT)
+# p = subprocess.Popen([sys.executable, 'game_files/main.py'], #try with subprocess
+#                                     stdout=subprocess.PIPE, 
+#                                     stderr=subprocess.STDOUT)
 
-def open_sub():
-    p = subprocess.Popen([sys.executable, 'game_files/main.py'], 
-                                    stdout=subprocess.PIPE, 
-                                    stderr=subprocess.STDOUT)
-    return
+if __name__ == '__main__':
+    freeze_support()
 
-# open_sub; # run game!
+    parent_con,child_con = Pipe()
+    p = Process(target=play, args=(child_con,))
+    p.start()
 
-resolution = pyautogui.size()
-pyautogui.moveTo(resolution[0]/2, resolution[1]/2 - 210, 1) # move 2 middle of the screen over 1 sec
-pyautogui.click()
+    resolution = pyautogui.size()
+    pyautogui.moveTo(resolution[0]/2, resolution[1]/2 - 210, 1) # move 2 middle of the screen over 1 sec
+    pyautogui.click()
 
-cur_time = time.time()
-press(VK_R)
-while time.time() <= cur_time + 10:
-    press( random.choice( [VK_A, VK_D, VK_SPACE, VK_W ] ) )
+    cur_time = time.time()
+    press(VK_R)
+    while time.time() <= cur_time + 10:
+        press( random.choice( [VK_A, VK_D, VK_SPACE, VK_W ] ) )
+        print(parent_con.recv())   # prints "Hello"
+        # press(VK_SPACE)
 
-    # press(VK_SPACE)
-
-# press(VK_Q)
+    # press(VK_Q)
