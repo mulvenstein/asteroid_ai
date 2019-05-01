@@ -93,7 +93,7 @@ def ReleaseKey(hexKeyCode):
     user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
 def press(virtual_key):
-    print("trying " + str(virtual_key))
+    # print("trying " + str(virtual_key))
     PressKey(virtual_key)
     time.sleep(.01)
     ReleaseKey(virtual_key)
@@ -122,12 +122,9 @@ if __name__ == '__main__':
 
     # cur_time = time.time()
     press(VK_R)
-    while True:
+    while parent_con.poll() is False : #while nothing isnt being sent to us. xD THIS TOoK SO LONG XDDDD
         press( random.choice( [VK_A, VK_D, VK_SPACE, VK_W ] ) )
-        # print(parent_con.recv())   # prints "Hello"
-        # press(VK_SPACE)
-        if ( parent_con.recv()=="gg" ):
-            print("gg we lose")
-            break
-
+        press(VK_SPACE)
     press(VK_Q)
+    time.sleep(.25) #wait a bit so parent can actually print output
+    print(str(parent_con.recv()))

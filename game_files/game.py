@@ -191,6 +191,7 @@ class Game:
                 text,
                 constants.DEATH_TEXT_COLOUR,
             )
+        
         msg="gg"
         self.child_con.send(msg)
         self.child_con.close()
