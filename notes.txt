@@ -1,7 +1,7 @@
 ---REQUIREMENTS---
 using game 
 sudo apt-get install python3 python3-pip libglfw3 libportaudio2 python-xlib
-pip3 install pyxel numpy pyautogui sendkeys Image pytesseract
+pip3 install pyxel numpy pyautogui sendkeys Image pytesseract multiprocessing 
 
 ---------------
 
@@ -48,3 +48,10 @@ pip3 install pyxel numpy pyautogui sendkeys Image pytesseract
 
 2 ) draw "eyes" onto the cutie ships
 3 ) start thinking of way to store final generation.
+
+5/1 ---
+fastest way to detect Loss is the game letting the runner know.
+  taking  ascreenshot and doing image processing is too slow for real time on my laptop
+  
+  so use https://stackoverflow.com/questions/14124588/shared-memory-in-multiprocessing
+  shared memory or something similar. When game is loss then go edit shared memory. 

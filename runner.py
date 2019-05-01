@@ -1,10 +1,11 @@
 import pyautogui                # move mouse
-import random                   #
-import sys                      #
+import random                   # randomly choosing moves
+import sys                      # appending path of game_files
 import subprocess               # run instace of asteroids game in background.
-import time                     #
-import ctypes                   #
-from ctypes import wintypes     #
+import time                     # testing gen 0 running for 10 seconds
+import ctypes                   # sending Virtual Keyboard presses
+from ctypes import wintypes     # sending Virtual Keyboard presses
+import multiprocessing          # shared data to determine loss or not
 
 user32 = ctypes.WinDLL('user32', use_last_error=True)
 INPUT_MOUSE    = 0
