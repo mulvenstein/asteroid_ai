@@ -81,7 +81,6 @@ class Game:
             if pyxel.btn(pyxel.KEY_UP) or pyxel.btnp(pyxel.KEY_W):
                 if not self.ship.accelerating:
                     sound.start_accelerate()
-                    print("upupup")
                 self.ship.accelerate()
             else:
                 if self.ship.accelerating:
@@ -156,9 +155,6 @@ class Game:
 
     def draw_score(self):
         """Draw the score and the high score at the top."""
-        msg="WE ARE FUCKING DEAD"
-        self.child_con.send(msg)
-        self.child_con.close()
         score = "{:04}".format(Asteroid.asteroid_score)
         high_score = "HS:{:04}".format(self.high_score)
         high_score_x = pyxel.width - 2 - (7 * pyxel.constants.FONT_WIDTH)
@@ -166,7 +162,6 @@ class Game:
         pyxel.text(3, 3, score, constants.SCORE_COLOUR)
         pyxel.text(high_score_x, 3, high_score, constants.SCORE_COLOUR)
         
-        exit; #jeesh
 
     def draw_death(self):
         """Draw the display text for the end of the game with the score."""
@@ -196,6 +191,10 @@ class Game:
                 text,
                 constants.DEATH_TEXT_COLOUR,
             )
+        msg="gg"
+        self.child_con.send(msg)
+        self.child_con.close()
+        # exit;
 
 def play(child_con):
     Game(child_con)

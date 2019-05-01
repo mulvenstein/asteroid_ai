@@ -93,6 +93,7 @@ def ReleaseKey(hexKeyCode):
     user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
 def press(virtual_key):
+    print("trying " + str(virtual_key))
     PressKey(virtual_key)
     time.sleep(.01)
     ReleaseKey(virtual_key)
@@ -119,11 +120,14 @@ if __name__ == '__main__':
     pyautogui.moveTo(resolution[0]/2, resolution[1]/2 - 210, 1) # move 2 middle of the screen over 1 sec
     pyautogui.click()
 
-    cur_time = time.time()
+    # cur_time = time.time()
     press(VK_R)
-    while time.time() <= cur_time + 10:
+    while True:
         press( random.choice( [VK_A, VK_D, VK_SPACE, VK_W ] ) )
-        print(parent_con.recv())   # prints "Hello"
+        # print(parent_con.recv())   # prints "Hello"
         # press(VK_SPACE)
+        if ( parent_con.recv()=="gg" ):
+            print("gg we lose")
+            break
 
-    # press(VK_Q)
+    press(VK_Q)
