@@ -55,6 +55,9 @@ class Game:
 
     def reset_game(self):
         """Initialise start of game state (reset ship position, score, and asteroids)."""
+        # send connection message to game lettin em know we out here
+        # self.child_con.send("reset")
+
         self.ship.reset()
         Asteroid.initiate_game()
         self.death = False
@@ -192,7 +195,7 @@ class Game:
                 constants.DEATH_TEXT_COLOUR,
             )
         
-        msg="gg"
+        msg=str(Asteroid.asteroid_score)+","+str(self.high_score)
         self.child_con.send(msg)
         self.child_con.close()
         # exit;

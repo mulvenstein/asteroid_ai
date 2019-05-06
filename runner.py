@@ -109,6 +109,49 @@ def press(virtual_key):
 #                                     stdout=subprocess.PIPE, 
 #                                     stderr=subprocess.STDOUT)
 
+
+def start_train():
+    '''
+    make sure game sends 'reset' in game.py class game method game_rester
+        also needs to send DONE before sending scores.
+    '''
+    # set up same cpu pipe so programs can talk to eachother quicky
+    parent_con,child_con = Pipe()
+    p = Process(target=play, args=(child_con,))
+    p.start()
+
+    print(str(dir(parent_con)) + "\n\n" + str(dir(child_con)))
+    
+    # wait for reset
+    while True:
+        msg = parent_con.recv()    # Read from the output pipe and do nothing
+        if msg=='reset':
+            break 
+    # we have reset, thus a game has started 
+
+    # move mouse to right place
+    resolution = pyautogui.size()
+    pyautogui.moveTo(resolution[0]/2, resolution[1]/2 - 210, .25) # move 2 middle of the screen over .25 sec
+    pyautogui.click()
+
+    
+    # play until message sent bout game "done"
+    while True : #while nothing isnt being sent to us. xD THIS TOoK SO LONG XDDDD
+        
+        msg = parent_con.recv()
+        if msg=='DONE':
+            time.sleep(.1) #wait a sec to break to get score datam
+            break
+
+        press( random.choice( [VK_A, VK_D, VK_SPACE, VK_W ] ) )
+        press(VK_SPACE)
+    
+    press(VK_Q) #quit, take scores
+
+    print(str(parent_con.recv()))
+    return
+
+
 if __name__ == '__main__':
     freeze_support()
 
@@ -116,15 +159,17 @@ if __name__ == '__main__':
     p = Process(target=play, args=(child_con,))
     p.start()
 
+    # start_train(); # start traingin
+    time.sleep(3)
     resolution = pyautogui.size()
-    pyautogui.moveTo(resolution[0]/2, resolution[1]/2 - 210, 1) # move 2 middle of the screen over 1 sec
+    pyautogui.moveTo(resolution[0]/2, resolution[1]/2 - 210, .25) # move 2 middle of the screen over 1 sec
     pyautogui.click()
 
     # cur_time = time.time()
     press(VK_R)
+    
     while parent_con.poll() is False : #while nothing isnt being sent to us. xD THIS TOoK SO LONG XDDDD
         press( random.choice( [VK_A, VK_D, VK_SPACE, VK_W ] ) )
         press(VK_SPACE)
-    press(VK_Q)
     time.sleep(.25) #wait a bit so parent can actually print output
     print(str(parent_con.recv()))
