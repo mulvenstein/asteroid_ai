@@ -41,7 +41,7 @@ class Ship:
         self.eyes = list()
         eye_angles = list( map( lambda x: x*45, [ i for i in range(8) ] ) ) 
         for i in eye_angles:
-            self.eyes.append( Eye(i, self) )
+            self.eyes.append( Eye(i, self, str(i)) )
 
 
     def reset(self):
@@ -288,7 +288,7 @@ class Eye:
     There is already a "Line" Class but ill just add my own class to make some
     eyes for the NN to use.
     '''
-    def __init__(self, angle, ship):
+    def __init__(self, angle, ship, name):
         self.magnitude = 45
         angle_radians = -math.radians(angle)
         self.x = ship.x
@@ -300,6 +300,7 @@ class Eye:
         self.intersect = (0, 0)
         self.kind = "eye"
         self.radius = 1
+        self.name = name # lets give each eye a name :))))))
 
     def update(self, ship): # make sure line is with ship when it rotates
         self.angle = ship.direction + self.reverse
