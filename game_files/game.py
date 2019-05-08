@@ -118,6 +118,7 @@ class Game:
             self.death_event()
 
         collisions.detect_bullet_asteroid_collisions(Bullet, Asteroid)
+        collisions.detect_eye_asteroid_collisions(self.ship.eyes, Asteroid)
 
     def death_event(self):
         """Modify game state for when the ship hits and asteroid."""
