@@ -34,6 +34,8 @@ class Ship:
         self.reset()
         self.accelerating = False
         self.shooting = False
+        
+        self.eyes = list( map( lambda x: x*45, [ i for i in range(8) ] ) ) 
 
     def reset(self):
         """Reset the game specific variables (position, momentum and direction)."""
@@ -116,7 +118,9 @@ class Ship:
         pass
 
     def update_position(self):
-        """Update the position and reduce the velocity."""
+        """Update the position and reduce the velocity.
+        ( also updates 'eyes' )
+        """
         self.x += self.momentum_x
         self.y += self.momentum_y
         self.momentum_x *= constants.DRAG
@@ -124,6 +128,9 @@ class Ship:
 
         self.x = check_bounds(self.x, pyxel.width, constants.BUFFER)
         self.y = check_bounds(self.y, pyxel.height, constants.BUFFER)
+
+        for eye in self.eyes:
+            eye.update(self)
 
     def display(self):
         """Display lines between each point and display the exhaust if accelerating."""
@@ -139,6 +146,15 @@ class Ship:
 
         if self.accelerating:
             self.display_acceleration()
+        
+        for eye in self.eyes:
+            pyxel.line(
+                x1=point1.x + self.x,
+                y1=point1.y + self.y,
+                x2=point2.x + self.x,
+                y2=point2.y + self.y,
+                col=10,
+            )
 
     def display_acceleration(self):
         """Display the exhaust if accelerating."""
@@ -149,10 +165,10 @@ class Ship:
             (0, constants.SHIP_ACCELERATION_POINTS[1]), self.direction
         )
         pyxel.line(
-            x1=x1 + self.x,
-            y1=y1 + self.y,
-            x2=x2 + self.x,
-            y2=y2 + self.y,
+            x1=eye.x,
+            y1=eye.y,
+            x2=eye.x2,
+            y2=eye.y2,
             col=constants.SHIP_ACCELERATION_COLOUR,
         )
 
@@ -258,3 +274,27 @@ class Line:
             y2=point2.y + self.y,
             col=self.colour,
         )
+
+class Eye:
+    '''
+    There is already a "Line" Class but ill just add my own class to make some
+    eyes for the NN to use.
+    '''
+    def __init__(self, angle, ship):
+        self.magnitude = 100
+        angle_radians = -math.radians(angle)
+        self.x = ship.x
+        self.y = ship.y
+        self.angle = angle
+        self.reverse = -angle
+        self.x_2 = self.x + math.cos(angle_radians) * self.magnitude
+        self.y_2 = self.y + math.sin(angle_radians) * self.magnitude
+        self.intersect = (0, 0)
+
+    def update(self, ship): # make sure line is with ship when it rotates
+        self.angle = ship.direction + self.reverse
+        angle_radians = -math.radians(self.rotation)
+        self.x = ship.x
+        self.y = ship.y
+        self.x2 = self.x + math.cos(angle_radians) * self.magnitude
+        self.y2 = self.y + math.sin(angle_radians) * self.magnitude

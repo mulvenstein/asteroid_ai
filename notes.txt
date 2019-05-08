@@ -3,6 +3,8 @@ using game
 sudo apt-get install python3 python3-pip libglfw3 libportaudio2 python-xlib
 pip3 install pyxel numpy pyautogui sendkeys Image pytesseract multiprocessing 
 
+maybe: pip3 install gym tensorflow datetime matplotlib
+
 ---------------
 
 # general notes
