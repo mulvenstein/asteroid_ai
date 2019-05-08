@@ -25,7 +25,7 @@ class Bullet:
         self.velocity_x = velocity_x
         self.velocity_y = velocity_y
         self.colour = colour
-
+        self.kind = "bullet"
         Bullet.bullets.append(self)
 
     def update(self):

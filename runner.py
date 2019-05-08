@@ -128,21 +128,26 @@ def start_train():
         if msg=='reset':
             break 
     # we have reset, thus a game has started 
-
+    
     # move mouse to right place
     resolution = pyautogui.size()
     pyautogui.moveTo(resolution[0]/2, resolution[1]/2 - 210, .25) # move 2 middle of the screen over .25 sec
     pyautogui.click()
 
-    
-    # play until message sent bout game "done"
-    while True : #while nothing isnt being sent to us. xD THIS TOoK SO LONG XDDDD
+    # b = False
+    # # play until message sent bout game "done"
+    # while b is False : #while nothing isnt being sent to us. xD THIS TOoK SO LONG XDDDD
         
-        msg = parent_con.recv()
-        if msg=='DONE':
-            time.sleep(.1) #wait a sec to break to get score datam
-            break
+    #     msg = parent_con.recv()
+    #     if msg=='DONE':
+    #         time.sleep(.1) #wait a sec to break to get score datam
+    #         b = True
+    #         break
 
+    #     press( random.choice( [VK_A, VK_D, VK_SPACE, VK_W ] ) )
+    #     press(VK_SPACE)
+
+    while parent_con.poll() is False : #while nothing isnt being sent to us. xD THIS TOoK SO LONG XDDDD
         press( random.choice( [VK_A, VK_D, VK_SPACE, VK_W ] ) )
         press(VK_SPACE)
     
@@ -154,22 +159,4 @@ def start_train():
 
 if __name__ == '__main__':
     freeze_support()
-
-    parent_con,child_con = Pipe()
-    p = Process(target=play, args=(child_con,))
-    p.start()
-
-    # start_train(); # start traingin
-    time.sleep(3)
-    resolution = pyautogui.size()
-    pyautogui.moveTo(resolution[0]/2, resolution[1]/2 - 210, .25) # move 2 middle of the screen over 1 sec
-    pyautogui.click()
-
-    # cur_time = time.time()
-    press(VK_R)
-    
-    while parent_con.poll() is False : #while nothing isnt being sent to us. xD THIS TOoK SO LONG XDDDD
-        press( random.choice( [VK_A, VK_D, VK_SPACE, VK_W ] ) )
-        press(VK_SPACE)
-    time.sleep(.25) #wait a bit so parent can actually print output
-    print(str(parent_con.recv()))
+    start_train();

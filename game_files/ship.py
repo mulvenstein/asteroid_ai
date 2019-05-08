@@ -34,7 +34,8 @@ class Ship:
         self.reset()
         self.accelerating = False
         self.shooting = False
-        
+        self.kind = "ship"
+
         self.eyes = list()
         eye_angles = list( map( lambda x: x*45, [ i for i in range(8) ] ) ) 
         for i in eye_angles:
@@ -285,7 +286,7 @@ class Eye:
     eyes for the NN to use.
     '''
     def __init__(self, angle, ship):
-        self.magnitude = 50
+        self.magnitude = 45
         angle_radians = -math.radians(angle)
         self.x = ship.x
         self.y = ship.y
