@@ -35,7 +35,11 @@ class Ship:
         self.accelerating = False
         self.shooting = False
         
-        self.eyes = list( map( lambda x: x*45, [ i for i in range(8) ] ) ) 
+        self.eyes = list()
+        eye_angles = list( map( lambda x: x*45, [ i for i in range(8) ] ) ) 
+        for i in eye_angles:
+            self.eyes.append( Eye(i, self) )
+
 
     def reset(self):
         """Reset the game specific variables (position, momentum and direction)."""
@@ -149,10 +153,10 @@ class Ship:
         
         for eye in self.eyes:
             pyxel.line(
-                x1=point1.x + self.x,
-                y1=point1.y + self.y,
-                x2=point2.x + self.x,
-                y2=point2.y + self.y,
+                x1=eye.x,
+                y1=eye.y,
+                x2=eye.x2,
+                y2=eye.y2,
                 col=10,
             )
 
@@ -165,10 +169,10 @@ class Ship:
             (0, constants.SHIP_ACCELERATION_POINTS[1]), self.direction
         )
         pyxel.line(
-            x1=eye.x,
-            y1=eye.y,
-            x2=eye.x2,
-            y2=eye.y2,
+            x1=x1 + self.x,
+            y1=y1 + self.y,
+            x2=x2 + self.x,
+            y2=y2 + self.y,
             col=constants.SHIP_ACCELERATION_COLOUR,
         )
 
@@ -281,7 +285,7 @@ class Eye:
     eyes for the NN to use.
     '''
     def __init__(self, angle, ship):
-        self.magnitude = 100
+        self.magnitude = 50
         angle_radians = -math.radians(angle)
         self.x = ship.x
         self.y = ship.y
@@ -293,7 +297,7 @@ class Eye:
 
     def update(self, ship): # make sure line is with ship when it rotates
         self.angle = ship.direction + self.reverse
-        angle_radians = -math.radians(self.rotation)
+        angle_radians = -math.radians(self.angle)
         self.x = ship.x
         self.y = ship.y
         self.x2 = self.x + math.cos(angle_radians) * self.magnitude
