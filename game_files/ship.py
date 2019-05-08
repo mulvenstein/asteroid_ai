@@ -316,8 +316,6 @@ class Eye:
             return False
         if other_object.kind is "line":
             return False
-
-        _eye = ((self.x, self.y), (self.x2, self.y2))
         
         intersections = []
         

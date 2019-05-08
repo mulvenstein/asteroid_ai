@@ -37,7 +37,7 @@ class Asteroid:
 
         By default, the asteroid is the largest size and randomly placed, but
         this is overriden for smaller asteroids."""
-
+        self.kind = "asteroid"
         self.colour = constants.ASTEROID_COLOUR
         self.size = size
         self.radius = radius
