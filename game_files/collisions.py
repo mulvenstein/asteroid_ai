@@ -21,7 +21,20 @@ def detect_eye_asteroid_collisions(eyes, asteroid_class):
     # test_cases = ((ship, asteroid) for asteroid in asteroid_class.asteroids)
     test_cases = ( (eye, asteroid) for eye in eyes for asteroid in asteroid_class.asteroids )
     # this will result in:  ( (x,1), (x,2), (x,3), (y,1), (y,2), (y,3) ) given lists [x,y] and [1,2,3]
-    return any((detect_collision(*test_case) for test_case in test_cases))
+    # return any((detect_collision(*test_case) for test_case in test_cases)) # this is the old method. wont work
+    for obj1, obj2 in test_cases:
+
+        delta_x = obj1.x - obj2.x
+        delta_y = obj1.y - obj2.y
+        rad = obj1.radius + obj2.radius
+
+        straight_line_dist = delta_x*delta_x + delta_y*delta_y
+        # print()
+        if straight_line_dist - rad < 4000: #magnitude of line
+            return (True, obj1) #return what eye is getting dicked
+    
+    return False
+
 
 def detect_ship_asteroid_collisions(ship, asteroid_class):
     """Iterate between the asteroids to detect collisions between the ship and asteroids."""

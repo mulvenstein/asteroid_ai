@@ -308,23 +308,3 @@ class Eye:
         self.y = ship.y
         self.x2 = self.x + math.cos(angle_radians) * self.magnitude
         self.y2 = self.y + math.sin(angle_radians) * self.magnitude
-
-    def object_collisions(self, other_object):
-        if other_object.kind is "bullet":
-            return False
-        if other_object.kind is "ship":
-            return False
-        if other_object.kind is "line":
-            return False
-        
-        intersections = []
-        
-        for line in other_object.box:
-            intersect = game.util.intersect(_eye,line)
-            if intersect is None:
-                continue
-            intersects.append(intersect)
-            break
-        if intersects == []:
-            self.intersect = (0,0)
-            return False

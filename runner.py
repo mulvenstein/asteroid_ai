@@ -147,6 +147,10 @@ def start_train():
     #     press( random.choice( [VK_A, VK_D, VK_SPACE, VK_W ] ) )
     #     press(VK_SPACE)
 
+    # TESTING COLLISIONS. COMMENT OUT AFTER
+    while True:
+        print(str(parent_con.recv()))
+
     while parent_con.poll() is False : #while nothing isnt being sent to us. xD THIS TOoK SO LONG XDDDD
         press( random.choice( [VK_A, VK_D, VK_SPACE, VK_W ] ) )
         press(VK_SPACE)
