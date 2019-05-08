@@ -235,6 +235,7 @@ class Line:
         self.vel_x, self.vel_y = velocity
         self.spin = spin
         self.colour = colour
+        self.kind = "line"
 
         self.points = []
         for end in (1, -1):
@@ -295,6 +296,8 @@ class Eye:
         self.x_2 = self.x + math.cos(angle_radians) * self.magnitude
         self.y_2 = self.y + math.sin(angle_radians) * self.magnitude
         self.intersect = (0, 0)
+        self.kind = "eye"
+        self.radius = 1
 
     def update(self, ship): # make sure line is with ship when it rotates
         self.angle = ship.direction + self.reverse
